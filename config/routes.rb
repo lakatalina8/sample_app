@@ -1,4 +1,12 @@
 SampleApp::Application.routes.draw do
+  #devise_for :admins, :path_names => { :sign_up => "registration" }
+  devise_for :admins do
+    get '/sign_up' => 'devise/registrations#new'
+  end
+  #root :to => "pages#home"
+
+  get "pages/help"
+
   get "pages/about"
 
   get "pages/home"
