@@ -1,17 +1,29 @@
 SampleApp::Application.routes.draw do
+  get "users/new"
+
   #devise_for :admins, :path_names => { :sign_up => "registration" }
-  devise_for :admins do
-    get '/sign_up' => 'devise/registrations#new'
-  end
+  #devise_for :admins do
+  #  get '/sign_up' => 'devise/registrations#new'
+  # end
   #root :to => "pages#home"
 
-  get "pages/help"
+ # get "pages/help"
 
-  get "pages/about"
+ # get "pages/about"
+
+ # get "pages/contact"
+
+  get "users/new"
+
+  match '/signup',  :to => 'users#new'
+
+  match '/contact', :to => 'pages#contact'
+  match '/about',   :to => 'pages#about'
+  match '/help',    :to => 'pages#help'
 
   get "pages/home"
 
-  get "pages/contact"
+  root :to => 'pages#home'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
