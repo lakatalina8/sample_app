@@ -7,6 +7,7 @@ gem 'rails', '3.2.1'
 
 gem 'sqlite3', :group => [:development, :test]
 gem 'gravatar_image_tag', '1.0.0.pre2'
+gem 'will_paginate', '~> 3.0'
 
 group :production do
   gem 'thin'
@@ -16,6 +17,7 @@ end
 group :development do
   gem 'rspec-rails', '2.6.1'
   gem 'annotate'
+  gem 'faker', '0.3.1' # створює напівреалістичних користувачів
 end
 
 group :test do
