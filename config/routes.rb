@@ -17,9 +17,17 @@ SampleApp::Application.routes.draw do
 
   resources :users
 
+  resources :users do
+    member do             # collection do, то було б без id - /users/following
+      get :following, :followers      #/users/1/following и /users/1/followers
+    end
+  end
+
   resources :sessions, :only => [:new, :create, :destroy]
 
   resources :microposts, :only => [:create, :destroy]
+
+  resources :relationships, :only => [:create, :destroy]
 
   match '/signup',  :to => 'users#new'
   match '/signin',  :to => 'sessions#new'

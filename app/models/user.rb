@@ -16,6 +16,15 @@ class User < ActiveRecord::Base
   attr_accessible :name, :email, :password, :password_confirmation
 
   has_many :microposts, :dependent => :destroy
+  has_many :microposts, :dependent => :destroy
+  has_many :relationships, :foreign_key => "follower_id",
+           :dependent => :destroy     #Поскольку уничтожение пользователя должно также уничтожить его взаимоотношения мы  добавили :dependent => :destroy
+  has_many :following, :through => :relationships, :source => :followed
+
+  has_many :reverse_relationships, :foreign_key => "followed_id",
+           :class_name => "Relationship",
+           :dependent => :destroy
+  has_many :followers, :through => :reverse_relationships, :source => :follower
 
   validates :name, :presence => true,
             :length   => { :maximum => 50 }
@@ -34,8 +43,24 @@ class User < ActiveRecord::Base
   end
 
   def feed
-    # Это предварительное решение. См. полную реализацию в Главе 12.
-    Micropost.where("user_id = ?", id)
+    Micropost.from_users_followed_by(self)
+  end
+
+  #def feed
+  #  # Это предварительное решение. См. полную реализацию в Главе 12.
+  #  Micropost.where("user_id = ?", id)
+  #end
+
+  def following?(followed)
+    relationships.find_by_followed_id(followed)
+  end
+
+  def follow!(followed)
+    relationships.create!(:followed_id => followed.id)
+  end
+
+  def unfollow!(followed)
+    relationships.find_by_followed_id(followed).destroy
   end
 
   private
@@ -67,5 +92,7 @@ class User < ActiveRecord::Base
     user = find_by_id(id)
     (user && user.salt == cookie_salt) ? user : nil
   end
+
+
 
 end
